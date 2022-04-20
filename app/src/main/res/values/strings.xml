@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NewsAppAPIDagger</string>
+    <string name="text_open">Open</string>
+    <string name="text_close">Close</string>
+</resources>
