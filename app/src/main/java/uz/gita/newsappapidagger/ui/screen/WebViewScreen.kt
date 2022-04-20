@@ -7,12 +7,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import uz.gita.contactapp3.utils.showToast
 import uz.gita.newsappapidagger.R
 import uz.gita.newsappapidagger.databinding.ScreenWebBinding
 import uz.gita.newsappapidagger.ui.viewmodel.contracts.WebViewModel
 import uz.gita.newsappapidagger.ui.viewmodel.implement.WebViewModelImpl
 
+@AndroidEntryPoint
 class WebViewScreen : Fragment(R.layout.screen_web) {
     private val model: WebViewModel by viewModels<WebViewModelImpl>()
     private val binding by viewBinding(ScreenWebBinding::bind)

@@ -1,5 +1,6 @@
 package uz.gita.newsappapidagger.ui.viewmodel.implement
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,16 @@ class MainViewModelImpl @Inject constructor(
     override val progressLiveData = MutableLiveData<Boolean>()
     override val titleLiveData = MutableLiveData<String>()
     override val refreshLiveData = MutableLiveData<Unit>()
+    override val openDrawerLiveData = MutableLiveData<Unit>()
+    override val closeDrawerLiveData = MutableLiveData<Unit>()
+
+    override fun openDrawer() {
+        openDrawerLiveData.value = Unit
+    }
+
+    override fun closeDrawer() {
+        closeDrawerLiveData.value = Unit
+    }
 
     companion object {
         var title = "ALL"

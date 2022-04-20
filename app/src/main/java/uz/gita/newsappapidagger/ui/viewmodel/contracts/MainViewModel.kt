@@ -11,7 +11,11 @@ interface MainViewModel {
     val progressLiveData: LiveData<Boolean>
     val titleLiveData: LiveData<String>
     val refreshLiveData: LiveData<Unit>
+    val openDrawerLiveData: LiveData<Unit>
+    val closeDrawerLiveData: LiveData<Unit>
 
+    fun openDrawer()
+    fun closeDrawer()
     fun refresh()
     fun titleChanged(title: String)
     fun loadNews(text: String)
