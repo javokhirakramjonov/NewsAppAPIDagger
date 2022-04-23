@@ -4,32 +4,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import uz.gita.newsappapidagger.data.model.ItemModel
+import uz.gita.newsappapidagger.R
+import uz.gita.newsappapidagger.data.local.ArticleEntity
 import uz.gita.newsappapidagger.databinding.ItemNewsBinding
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
-    private var list = ArrayList<ItemModel>()
-    var clickListener: ((link: ItemModel) -> Unit)? = null
+    private var list = ArrayList<ArticleEntity>()
+    var clickListener: ((link: ArticleEntity) -> Unit)? = null
 
-    fun setMyClickListener(click: (ItemModel) -> Unit) {
+    fun setMyClickListener(click: (ArticleEntity) -> Unit) {
         clickListener = click
     }
 
-    fun loadList(contacts: List<ItemModel>) {
+    fun loadList(contacts: List<ArticleEntity>) {
         list.clear()
         list.addAll(contacts)
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
-//        private val titleV = itemView.findViewById<TextView>(R.id.title)
-//        private val authorV = itemView.findViewById<TextView>(R.id.author)
-//        private val imageV = itemView.findViewById<ImageView>(R.id.image)
-//        private val descriptionV = itemView.findViewById<TextView>(R.id.description)
-//        private val timeV = itemView.findViewById<TextView>(R.id.time)
-//        private val inShortV = itemView.findViewById<AppCompatButton>(R.id.inShort)
-//        private val readMoreV = itemView.findViewById<AppCompatButton>(R.id.readMore)
 
         fun bind() {
             with(list[absoluteAdapterPosition]) {
@@ -37,6 +31,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
                 binding.author.text = author
                 Glide.with(binding.root)
                     .load(image)
+                    .placeholder(R.drawable.img)
                     .into(binding.image)
                 binding.description.text = description
                 binding.time.text = timestamp

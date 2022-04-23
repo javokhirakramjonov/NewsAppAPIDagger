@@ -8,11 +8,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import uz.gita.contactapp3.utils.showToast
 import uz.gita.newsappapidagger.R
 import uz.gita.newsappapidagger.databinding.ScreenWebBinding
 import uz.gita.newsappapidagger.ui.viewmodel.contracts.WebViewModel
 import uz.gita.newsappapidagger.ui.viewmodel.implement.WebViewModelImpl
+import uz.gita.newsappapidagger.utils.isConnected
 
 @AndroidEntryPoint
 class WebViewScreen : Fragment(R.layout.screen_web) {
@@ -21,38 +21,42 @@ class WebViewScreen : Fragment(R.layout.screen_web) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         title.text = requireArguments().getString("TITLE")
-        if(title.text.toString().length >= 30)
-            title.text = title.text.toString().substring(0,27) + "..."
+        if (title.text.toString().length >= 30)
+            title.text = title.text.toString().substring(0, 27) + "..."
         back.setOnClickListener { model.openMainScreen() }
 
-        model.loadSource()
+        refresh.setOnRefreshListener {
+            model.refresh()
+        }
 
-        model.errorLiveData.observe(viewLifecycleOwner, errorObserver)
+        model.loadSource()
+        model.noDataLiveData.observe(viewLifecycleOwner, noDataObserver)
         model.openMainScreenLiveData.observe(viewLifecycleOwner, openMainScreenObserver)
-        model.progressLiveData.observe(viewLifecycleOwner, progressObserver)
         model.sourceLiveData.observe(viewLifecycleOwner, sourceObserver)
     }
 
-    private val errorObserver = Observer<String> {
-        showToast(it)
+    private val noDataObserver = Observer<Boolean> {
+        if (it) {
+            binding.webView.visibility = View.VISIBLE
+            binding.errorData.visibility = View.GONE
+        } else {
+            binding.webView.visibility = View.GONE
+            binding.errorData.visibility = View.VISIBLE
+        }
     }
 
     private val openMainScreenObserver = Observer<Unit> {
-        findNavController().navigate(R.id.action_webViewScreen_to_mainScreen)
-    }
-
-    private val progressObserver = Observer<Boolean> {
-        if (it) binding.progress.show()
-        else binding.progress.hide()
+        findNavController().navigateUp()
     }
 
     private val sourceObserver = Observer<Unit> {
-        if(requireArguments().getString("URL") != null)
+        if (requireArguments().getString("URL") != null && isConnected()) {
+            model.changeState(true)
             binding.webView.loadUrl(requireArguments().getString("URL")!!)
-        else
-            showToast("error url")
-        binding.progress.hide()
-    }
+        } else {
+            model.changeState(false)
+        }
 
-    
+        binding.refresh.isRefreshing = false
+    }
 }

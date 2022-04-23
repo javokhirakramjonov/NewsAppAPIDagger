@@ -1,9 +1,7 @@
 package uz.gita.newsappapidagger.ui.screen
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import uz.gita.contactapp3.utils.showToast
 import uz.gita.newsappapidagger.R
-import uz.gita.newsappapidagger.data.model.ItemModel
+import uz.gita.newsappapidagger.data.local.ArticleEntity
 import uz.gita.newsappapidagger.databinding.ScreenExtraBinding
 import uz.gita.newsappapidagger.ui.adapter.CategoryAdapter
 import uz.gita.newsappapidagger.ui.adapter.NewsAdapter
@@ -52,6 +50,7 @@ class MainScreen : Fragment(R.layout.screen_extra) {
             model.openWeb(it)
         }
 
+        model.noDataLiveData.observe(viewLifecycleOwner, noDataObserver)
         model.titleLiveData.observe(viewLifecycleOwner, titleObserver)
         model.refreshLiveData.observe(viewLifecycleOwner, refreshObserver)
         model.errorLiveData.observe(viewLifecycleOwner, errorObserver)
@@ -61,6 +60,18 @@ class MainScreen : Fragment(R.layout.screen_extra) {
         model.openDrawerLiveData.observe(viewLifecycleOwner, openDrawerObserver)
         model.closeDrawerLiveData.observe(viewLifecycleOwner, closeDrawerObserver)
 
+    }
+
+    private val noDataObserver = Observer<Boolean> {
+        with(binding.inner) {
+            if (it) {
+                errorData.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            } else {
+                errorData.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+        }
     }
 
     private val openDrawerObserver = Observer<Unit> {
@@ -83,15 +94,15 @@ class MainScreen : Fragment(R.layout.screen_extra) {
         showToast(it)
     }
 
-    private val newsObserver = Observer<List<ItemModel>> {
+    private val newsObserver = Observer<List<ArticleEntity>> {
         adapter.loadList(it)
         binding.inner.refresh.isRefreshing = false
     }
 
-    private val openWebObserver = Observer<ItemModel> {
+    private val openWebObserver = Observer<ArticleEntity> {
         val bundle = Bundle()
         bundle.putString("TITLE", it.title)
-        bundle.putString("URL", it.read_more)
+        bundle.putString("URL", it.readMore)
         findNavController().navigate(R.id.action_mainScreen_to_webViewScreen, bundle)
     }
 

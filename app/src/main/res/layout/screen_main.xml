@@ -43,14 +43,27 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_news" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:orientation="vertical">
+            <ImageView
+                android:layout_weight="1"
+                android:id="@+id/errorData"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:src="@drawable/image_data_not_found"
+                android:scaleType="centerCrop"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_weight="1"
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                tools:listitem="@layout/item_news" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <androidx.core.widget.ContentLoadingProgressBar

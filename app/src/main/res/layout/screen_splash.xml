@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.screen.SplashScreen">
+    tools:context=".ui.screen.SplashScreen"
+    android:background="#ff0">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
